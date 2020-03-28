@@ -1,8 +1,8 @@
 from cryptography.fernet import Fernet
 
-fkey = open("file_key.txt",'rb')
-key = fkey.read()
-cipher = Fernet(key)
+fkey = input("Please input your key: ")
+# key = fkey.read()
+cipher = Fernet(fkey)
 
 filename = 'secret_excel.xltx'
 
