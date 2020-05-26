@@ -1,0 +1,110 @@
+Index: f_decrypt.py
+===================================================================
+--- f_decrypt.py	(revision b4af065671fcdfd1a012ee4798ae21b53fdc7630)
++++ f_decrypt.py	(revision b4af065671fcdfd1a012ee4798ae21b53fdc7630)
+@@ -1,14 +0,0 @@
+-from cryptography.fernet import Fernet
+-
+-fkey = input("Enter your key:")
+-# key = fkey.read()
+-cipher = Fernet(fkey)
+-
+-with open('secret_excel.xltxencrypted','rb') as df:
+-    encrypted_data = df.read()
+-
+-
+-decrypted_file = cipher.decrypt(encrypted_data)
+-
+-with open('secret_excel decrypted.xltx','wb') as df:
+-    df.write(decrypted_file)
+\ No newline at end of file
+Index: f_encrypt.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from cryptography.fernet import Fernet\n\nfkey = input(\"Please input your key: \")\n# key = fkey.read()\ncipher = Fernet(fkey)\n\nfilename = 'secret_excel.xltx'\n\nwith open(filename,'rb')as f:\n    e_file = f.read()\n\nencrypted_file = cipher.encrypt(e_file)\n\nwith open(filename + \"encrypted\",'wb') as ef:\n    ef.write(encrypted_file)\n\n\n\n
+===================================================================
+--- f_encrypt.py	(revision b4af065671fcdfd1a012ee4798ae21b53fdc7630)
++++ f_encrypt_password.py	(date 1585518240484)
+@@ -1,8 +1,8 @@
+ from cryptography.fernet import Fernet
+ 
+-fkey = input("Please input your key: ")
+-# key = fkey.read()
+-cipher = Fernet(fkey)
++key = input("Please input your key: ")
++
++cipher = Fernet(key)
+ 
+ filename = 'secret_excel.xltx'
+ 
+@@ -11,7 +11,7 @@
+ 
+ encrypted_file = cipher.encrypt(e_file)
+ 
+-with open(filename + "encrypted",'wb') as ef:
++with open("encrypted_" + filename,'wb') as ef:
+     ef.write(encrypted_file)
+ 
+ 
+Index: gen_passkey.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import base64\nfrom cryptography.hazmat.backends import default_backend\nfrom cryptography.hazmat.primitives import hashes\nfrom cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC\n\npassword_provided = input(\"please enter your password:\")\npassword = password_provided.encode()\n\nmysalt = b'\\xf8\\x06/aqi\\xea\\x7fC\\xce\"o\\xf0\\xf2\\x81\\xc6='\n\nkdf = PBKDF2HMAC(\n\n    algorithm=hashes.SHA256,\n    length=32,\n    salt=mysalt,\n    iterations=100000,\n    backend=default_backend()\n)\nkey = base64.urlsafe_b64encode(kdf.derive(password))\n\nprint(key.decode())\n# with open('pass_encrypt_key.key', 'wb') as ef:\n#     ef.write(key)\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- gen_passkey.py	(revision b4af065671fcdfd1a012ee4798ae21b53fdc7630)
++++ gen_passkey.py	(date 1585518298947)
+@@ -3,21 +3,20 @@
+ from cryptography.hazmat.primitives import hashes
+ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+ 
+-password_provided = input("please enter your password:")
+-password = password_provided.encode()
++pass_from_user = input("Please enter your password: ")
++password = pass_from_user.encode()
+ 
+-mysalt = b'\xf8\x06/aqi\xea\x7fC\xce"o\xf0\xf2\x81\xc6='
++mysalt = b'q\xe3Q5\x8c\x19~\x17\xcb\x88\xc6A\xb8j\xb4\x85'
+ 
+-kdf = PBKDF2HMAC(
+-
++kdf = PBKDF2HMAC (
+     algorithm=hashes.SHA256,
+     length=32,
+     salt=mysalt,
+     iterations=100000,
+     backend=default_backend()
++
+ )
++
+ key = base64.urlsafe_b64encode(kdf.derive(password))
+ 
+-print(key.decode())
+-# with open('pass_encrypt_key.key', 'wb') as ef:
+-#     ef.write(key)
++print("Your symmetric encryption key is: " + key.decode())
+\ No newline at end of file
+Index: f_decrypt_password.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- f_decrypt_password.py	(date 1585518421021)
++++ f_decrypt_password.py	(date 1585518421021)
+@@ -0,0 +1,14 @@
++from cryptography.fernet import Fernet
++
++key = input("Enter your key:")
++
++cipher = Fernet(key)
++
++with open('encrypted_secret_excel.xltx', 'rb') as df:
++    encrypted_data = df.read()
++
++
++decrypted_file = cipher.decrypt(encrypted_data)
++
++with open('decrypted_secret_excel.xltx','wb') as df:
++    df.write(decrypted_file)
+\ No newline at end of file
