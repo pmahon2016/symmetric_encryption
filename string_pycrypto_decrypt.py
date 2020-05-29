@@ -8,6 +8,7 @@ key = hashlib.sha256(password).digest()
 cipher = AES.new(key, AES.MODE_CBC, 'This is an IV456')
 
 
-decrypted_text = cipher.decrypt(b'L-\r\x95;\xec]z\xebx\x88\x9d\xc5\xcc\xe2\xf4j\xe3V\x97\x1b\t\xd2\x9c\xf7M\xaa\x93\xe4\xb9\x82b')
+decrypted_text = cipher.decrypt(b'(n\xed\x8e\x05\x030!U\x07\xfeQ\xf4 @\x8fI\x11\x1f\x96n\x98JF\x9d\xe0\x1a\x1ce\xce\x1fY'
+)
 print(decrypted_text.rstrip().decode())
 
